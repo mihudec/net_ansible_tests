@@ -68,6 +68,7 @@ jobs:
 
       - name: Setup Templates Symlinks
         run: |
+          ll $ANSIBLE_COLLECTIONS_PATH
           echo "$ANSIBLE_COLLECTIONS_PATH"
           python "$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py"
 
