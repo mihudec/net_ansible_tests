@@ -37,8 +37,11 @@ jobs:
       - name: Install pip
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest
       
+      - name: Install Ansible and requirements
+        run:
+          pip install ansible jmespath netaddr
+
       - name: Install net_models
         run: |
           cd ./net_models/
@@ -67,7 +70,7 @@ jobs:
           path: './net_ansible_tests'
 
       - name: Run Tests
-        run:
+        run: |
           cd ./net_ansible_tests
           chmod +x run_tests.sh
           ./run_tests.sh
