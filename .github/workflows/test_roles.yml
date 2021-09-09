@@ -68,16 +68,16 @@ jobs:
 
       - name: Setup Templates Symlinks
         run: |
-          python $ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py 
+          python "$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py"
 
       - name: Checkout net_ansible_tests
         uses: actions/checkout@v2
         with:
-          path: '$GITHUB_WORKSPACE/net_ansible_tests'
+          path: 'net_ansible_tests'
 
       - name: Run Tests
         run: |
-          cd ./net_ansible_tests
+          cd $GITHUB_WORKSPACE/net_ansible_tests
           chmod +x run_tests.sh
           ./run_tests.sh
 
