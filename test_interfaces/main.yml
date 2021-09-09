@@ -1,0 +1,16 @@
+---
+- hosts: network
+  gather_facts: false
+  roles:
+    - role: mihudec.net_ansible.interfaces
+      vars:
+        TEMPLATE_ONLY: true
+  tasks:
+    - name: Verify
+      assert:
+        that:
+          - lookup('file', have_path) == lookup('file', want_path)
+      vars: 
+        have_path: "{{ TEMPLATE_OUTPUT_DIR }}/{{ inventory_hostname }}_{{ ansible_network_os }}_{{ template_name }}.txt"
+        want_path: "results/ios_interfaces.txt"
+        template_name: interfaces

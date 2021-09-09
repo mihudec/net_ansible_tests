@@ -1,0 +1,21 @@
+all:
+  children:
+    network:
+      vars:
+        ansible_connection: network_cli
+        ansible_network_os: ios
+        ansible_username: admin
+        ansible_password: admin
+      hosts:
+        TEST_HOST-01:
+          ansible_connection: network_cli
+          ansible_network_os: ios
+          ansible_host: 127.0.0.1
+          interfaces:
+            Loopback0:
+              name: Loopback0
+              description: '[Management Interface]'
+              l3_port:
+                ipv4:
+                  addresses:
+                    - address: 192.0.2.1/32
