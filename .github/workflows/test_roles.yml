@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Show HOME
+        run: echo $HOME
       - name: Checkout net_models
         uses: actions/checkout@v2
         with:
@@ -56,12 +58,20 @@ jobs:
       
       - name: Install net_ansible Collection
         run: |
-          ansible-galaxy collection install https://github.com/mihudec/net_ansible.git
+          mkdir -p ./collections/ansible_collections/mihudec/
+          cd ./collections/ansible_collections
+          export ANSIBLE_COLLECTIONS_PATH=$(pwd)
+          cd ../../
+
+      - name: Checkout net_ansible
+        uses: actions/checkout@v2
+        with:
+          repository: mihudec/net_ansible
+          path: './collections/ansible_collections/mihudec/net_ansible'
 
       - name: Setup Templates Symlinks
         run: |
-          cd ~/.ansible/collections/ansible_collections/mihudec/net_ansible/plugins/module_utils
-          python create_templates_symlink.py 
+          python ./collections/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py 
 
       - name: Checkout net_ansible_tests
         uses: actions/checkout@v2
