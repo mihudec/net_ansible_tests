@@ -56,13 +56,13 @@ jobs:
       
       - name: Create Ansible Collections path
         run:
-          mkdir -p ~/.ansible/collections/mihudec
+          mkdir -p ~/.ansible/collections/ansible_collections/mihudec
 
       - name: Checkout net_ansible
         uses: actions/checkout@v2
         with:
           repository: mihudec/net_ansible
-          path: '~/.ansible/collections/mihudec/net_ansible'
+          path: '~/.ansible/collections/ansible_collections/mihudec/net_ansible'
 
       - name: Checkout net_ansible_tests
         uses: actions/checkout@v2
