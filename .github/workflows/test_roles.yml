@@ -57,7 +57,7 @@ jobs:
       - name: Create Collections Directory
         run: |
           mkdir -p $GITHUB_WORKSPACE/collections/ansible_collections/mihudec/
-          echo 'ANSIBLE_COLLECTIONS_PATH=$GITHUB_WORKSPACE/collections' >> $GITHUB_ENV
+          echo "ANSIBLE_COLLECTIONS_PATH=$GITHUB_WORKSPACE/collections" >> $GITHUB_ENV
           echo "Ansible Collections Path is $ANSIBLE_COLLECTIONS_PATH"
 
       - name: Checkout net_ansible
