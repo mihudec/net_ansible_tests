@@ -21,13 +21,13 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: mihudec/net_models
-          path: './net_models'
+          path: '~/net_models'
 
       - name: Checkout net_templates
         uses: actions/checkout@v2
         with:
           repository: mihudec/net_templates
-          path: './net_templates'
+          path: '~/net_templates'
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
@@ -44,28 +44,33 @@ jobs:
 
       - name: Install net_models
         run: |
-          cd ./net_models/
+          cd ~/net_models/
           python setup.py install
           cd ..
 
       - name: Install net_templates
         run: |
-          cd ./net_templates/
+          cd ~/net_templates/
           python setup.py install
           cd ..
       
       - name: Install net_ansible Collection
         run: |
-          ansible-galaxy collection install git@github.com:mihudec/net_ansible.git
+          ansible-galaxy collection install https://github.com/mihudec/net_ansible.git
+
+      - name: Setup Templates Symlinks
+        run: |
+          cd ~/.ansible/collections/ansible_collections/mihudec/net_ansible/plugins/module_utils
+          python create_templates_symlink.py 
 
       - name: Checkout net_ansible_tests
         uses: actions/checkout@v2
         with:
-          path: './net_ansible_tests'
+          path: '~/net_ansible_tests'
 
       - name: Run Tests
         run: |
-          cd ./net_ansible_tests
+          cd ~/net_ansible_tests
           chmod +x run_tests.sh
           ./run_tests.sh
 
