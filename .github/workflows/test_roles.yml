@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: mihudec/net_ansible
-          path: '$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible'
+          path: 'collections/ansible_collections/mihudec/net_ansible'
 
       - name: Setup Templates Symlinks
         run: |
