@@ -17,19 +17,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Show HOME
-        run: echo $HOME
       - name: Checkout net_models
         uses: actions/checkout@v2
         with:
           repository: mihudec/net_models
-          path: './net_models'
+          path: '$GITHUB_WORKSPACE/net_models'
 
       - name: Checkout net_templates
         uses: actions/checkout@v2
         with:
           repository: mihudec/net_templates
-          path: './net_templates'
+          path: '$GITHUB_WORKSPACE/net_templates'
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
@@ -46,37 +44,36 @@ jobs:
 
       - name: Install net_models
         run: |
-          cd ./net_models/
+          cd $GITHUB_WORKSPACE/net_models/
           python setup.py install
-          cd ..
+          cd $GITHUB_WORKSPACE
 
       - name: Install net_templates
         run: |
-          cd ./net_templates/
+          cd $GITHUB_WORKSPACE/net_templates/
           python setup.py install
-          cd ..
+          cd $GITHUB_WORKSPACE
       
-      - name: Install net_ansible Collection
+      - name: Create Collections Directory
         run: |
-          mkdir -p ./collections/ansible_collections/mihudec/
-          cd ./collections/ansible_collections
-          export ANSIBLE_COLLECTIONS_PATH=$(pwd)
-          cd ../../
+          mkdir -p $GITHUB_WORKSPACE/collections/ansible_collections/mihudec/
+          export ANSIBLE_COLLECTIONS_PATH=$GITHUB_WORKSPACE/collections
+          echo "Ansible Collections Path is $ANSIBLE_COLLECTIONS_PATH"
 
       - name: Checkout net_ansible
         uses: actions/checkout@v2
         with:
           repository: mihudec/net_ansible
-          path: './collections/ansible_collections/mihudec/net_ansible'
+          path: '$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible'
 
       - name: Setup Templates Symlinks
         run: |
-          python ./collections/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py 
+          python $ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py 
 
       - name: Checkout net_ansible_tests
         uses: actions/checkout@v2
         with:
-          path: './net_ansible_tests'
+          path: '$GITHUB_WORKSPACE/net_ansible_tests'
 
       - name: Run Tests
         run: |
