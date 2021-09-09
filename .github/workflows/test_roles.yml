@@ -17,68 +17,71 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout net_models
-        uses: actions/checkout@v2
-        with:
-          repository: mihudec/net_models
-          path: 'net_models'
+      - step: Echo GITHUB_ENV
+        run: echo $GITHUB_ENV
+      # - name: Checkout net_models
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: mihudec/net_models
+      #     path: 'net_models'
 
-      - name: Checkout net_templates
-        uses: actions/checkout@v2
-        with:
-          repository: mihudec/net_templates
-          path: 'net_templates'
+      # - name: Checkout net_templates
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: mihudec/net_templates
+      #     path: 'net_templates'
 
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
+      # - name: Set up Python 3.9
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.9
 
-      - name: Install pip
-        run: |
-          python -m pip install --upgrade pip
+      # - name: Install pip
+      #   run: |
+      #     python -m pip install --upgrade pip
       
-      - name: Install Ansible and requirements
-        run:
-          pip install ansible jmespath netaddr
+      # # - name: Install Ansible and requirements
+      # #   run:
+      # #     pip install ansible jmespath netaddr
 
-      - name: Install net_models
-        run: |
-          cd $GITHUB_WORKSPACE/net_models/
-          python setup.py install
-          cd $GITHUB_WORKSPACE
+      # - name: Install net_models
+      #   run: |
+      #     cd $GITHUB_WORKSPACE/net_models/
+      #     python setup.py install
+      #     cd $GITHUB_WORKSPACE
 
-      - name: Install net_templates
-        run: |
-          cd $GITHUB_WORKSPACE/net_templates/
-          python setup.py install
-          cd $GITHUB_WORKSPACE
+      # - name: Install net_templates
+      #   run: |
+      #     cd $GITHUB_WORKSPACE/net_templates/
+      #     python setup.py install
+      #     cd $GITHUB_WORKSPACE
       
-      - name: Create Collections Directory
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/collections/ansible_collections/mihudec/
-          export ANSIBLE_COLLECTIONS_PATH=$GITHUB_WORKSPACE/collections
-          echo "Ansible Collections Path is $ANSIBLE_COLLECTIONS_PATH"
+      # - name: Create Collections Directory
+      #   run: |
+      #     mkdir -p $GITHUB_WORKSPACE/collections/ansible_collections/mihudec/
+      #     echo ANSIBLE_COLLECTIONS_PATH=$GITHUB_WORKSPACE/collections > /etc/environment
+      #     echo "Ansible Collections Path is $ANSIBLE_COLLECTIONS_PATH"
 
-      - name: Checkout net_ansible
-        uses: actions/checkout@v2
-        with:
-          repository: mihudec/net_ansible
-          path: '$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible'
+      # - name: Checkout net_ansible
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: mihudec/net_ansible
+      #     path: '$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible'
 
-      - name: Setup Templates Symlinks
-        run: |
-          python "$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py"
+      # - name: Setup Templates Symlinks
+      #   run: |
+      #     echo "$ANSIBLE_COLLECTIONS_PATH"
+      #     python "$ANSIBLE_COLLECTIONS_PATH/ansible_collections/mihudec/net_ansible/plugins/module_utils/create_templates_symlink.py"
 
-      - name: Checkout net_ansible_tests
-        uses: actions/checkout@v2
-        with:
-          path: 'net_ansible_tests'
+      # - name: Checkout net_ansible_tests
+      #   uses: actions/checkout@v2
+      #   with:
+      #     path: 'net_ansible_tests'
 
-      - name: Run Tests
-        run: |
-          cd $GITHUB_WORKSPACE/net_ansible_tests
-          chmod +x run_tests.sh
-          ./run_tests.sh
+      # - name: Run Tests
+      #   run: |
+      #     cd $GITHUB_WORKSPACE/net_ansible_tests
+      #     chmod +x run_tests.sh
+      #     ./run_tests.sh
 
       
