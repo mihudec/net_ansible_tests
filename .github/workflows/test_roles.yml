@@ -1,0 +1,75 @@
+name: Test Python 3.9 - Ubuntu Latest
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+jobs:
+
+  test:
+    name: Run Tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout net_models
+        uses: actions/checkout@v2
+        with:
+          repository: mihudec/net_models
+          path: './net_models'
+
+      - name: Checkout net_templates
+        uses: actions/checkout@v2
+        with:
+          repository: mihudec/net_templates
+          path: './net_templates'
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install pip
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+      
+      - name: Install net_models
+        run: |
+          cd ./net_models/
+          python setup.py install
+          cd ..
+
+      - name: Install net_templates
+        run: |
+          cd ./net_templates/
+          python setup.py install
+          cd ..
+      
+      - name: Create Ansible Collections path
+        run:
+          mkdir -p ~/.ansible/collections/mihudec
+
+      - name: Checkout net_ansible
+        uses: actions/checkout@v2
+        with:
+          repository: mihudec/net_ansible
+          path: '~/.ansible/collections/mihudec/net_ansible'
+
+      - name: Checkout net_ansible_tests
+        uses: actions/checkout@v2
+        with:
+          path: './net_ansible_tests'
+
+      - name: Run Tests
+        run:
+          cd ./net_ansible_tests
+          chmod +x run_tests.sh
+          ./run_tests.sh
+
+      
