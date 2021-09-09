@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - step: Echo GITHUB_ENV
+      - name: Echo GITHUB_ENV
         run: echo $GITHUB_ENV
       # - name: Checkout net_models
       #   uses: actions/checkout@v2
