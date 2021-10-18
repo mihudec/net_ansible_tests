@@ -2,11 +2,9 @@
 - hosts: network
   gather_facts: false
   roles:
-    - role: mihudec.net_ansible.interfaces
+    - role: mihudec.net_ansible.routing_bgp
       vars:
         TEMPLATE_ONLY: true
-        INTERFACES_DICT_PARAMS:
-          exclude_none: True
   tasks:
     - name: Verify
       assert:
@@ -15,4 +13,4 @@
       vars: 
         have_path: "{{ TEMPLATE_OUTPUT_DIR }}/{{ inventory_hostname }}_{{ ansible_network_os }}_{{ template_name }}.txt"
         want_path: "results/{{ inventory_hostname }}_{{ ansible_network_os }}_{{ template_name }}.txt"
-        template_name: interfaces
+        template_name: routing_bgp

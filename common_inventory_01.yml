@@ -1,0 +1,115 @@
+all:
+  children:
+    network:
+      vars:
+        ansible_connection: network_cli
+        ansible_network_os: ios
+        ansible_username: admin
+        ansible_password: admin
+        ibgp_peer_group: 
+          name: iBGP
+          asn: 1234
+          timers:
+            hello: 10
+            hold: 30
+        vlan_definitions:
+          - vlan_id: 10
+            name: TestVlan10
+            hosts:
+              - TEST_HOST-01
+              - TEST_HOST-02
+          - vlan_id: 11
+            name: TestVlan11
+            hosts:
+              - TEST_HOST-01
+          - vlan_id: 12
+            name: TestVlan12
+            hosts:
+              - TEST_HOST-02
+        access_lists:
+          - acl_type: standard
+            acl_version: ipv4
+            name: ACL-TEST
+            entries:
+              - seq_no: 10
+                action: permit
+                src_address: 192.0.2.0/24
+      hosts:
+        TEST_HOST-01:
+          ansible_connection: network_cli
+          ansible_network_os: ios
+          ansible_host: 127.0.0.1
+          interfaces:
+            Loopback0:
+              name: Loopback0
+              description: '[Management Interface]'
+              l3_port:
+                ipv4:
+                  addresses:
+                    - address: 192.0.2.1/32
+          routing:
+            bgp:
+              asn: 1234
+              router_id: "{{ interfaces['Loopback0'].l3_port.ipv4.addresses[0].address | mihudec.net_filters.ipaddress('address') }}"
+              peer_groups:
+                - "{{ ibgp_peer_group }}"
+              neighbors:
+                - name: TEST_HOST-02
+                  peer_group: iBGP
+                  dest_interface: Loopback0
+              address_families:
+                - afi: vpnv4
+                  peer_groups:
+                    - name: iBGP
+                      send_community: both
+                  neighbors:
+                    - name: TEST_HOST-02
+                - afi: ipv4
+                  vrf: Internet
+                  peer_groups:
+                    - name: Provider
+                      asn: 100
+                  neighbors:
+                    - name: Provider-01
+                      peer_group: Provider
+                      address: 192.0.2.101
+              
+        TEST_HOST-02:
+          ansible_connection: network_cli
+          ansible_network_os: ios
+          ansible_host: 127.0.0.1
+          interfaces:
+            Loopback0:
+              name: Loopback0
+              description: '[Management Interface]'
+              l3_port:
+                ipv4:
+                  addresses:
+                    - address: 192.0.2.2/32
+          routing:
+            bgp:
+              asn: 1234
+              router_id: "{{ interfaces['Loopback0'].l3_port.ipv4.addresses[0].address | mihudec.net_filters.ipaddress('address') }}"
+              peer_groups:
+                - "{{ ibgp_peer_group }}"
+              neighbors:
+                - name: TEST_HOST-01
+                  peer_group: iBGP
+                  dest_interface: Loopback0
+              address_families:
+                - afi: vpnv4
+                  peer_groups:
+                    - name: iBGP
+                      send_community: both
+                  neighbors:
+                    - name: TEST_HOST-01
+                - afi: ipv4
+                  vrf: Internet
+                  peer_groups:
+                    - name: Provider
+                      asn: 100
+                  neighbors:
+                    - name: Provider-02
+                      peer_group: Provider
+                      address: 192.0.2.102
+                    

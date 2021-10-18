@@ -1,0 +1,19 @@
+router bgp 1234
+ bgp router-id 192.0.2.1
+ !
+ neighbor iBGP peer-group
+ neighbor iBGP remote-as 1234
+ neighbor iBGP timers 10 30
+ !
+ neighbor 192.0.2.2 peer-group iBGP
+ !
+ address-family vpnv4
+  neighbor iBGP send-community both
+  neighbor 192.0.2.2 activate
+ exit-address-family
+ !
+ address-family ipv4 vrf Internet
+  neighbor Provider peer-group
+  neighbor Provider remote-as 100
+  neighbor 192.0.2.101 peer-group Provider
+ exit-address-family

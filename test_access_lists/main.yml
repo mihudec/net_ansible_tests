@@ -1,0 +1,8 @@
+---
+- hosts: network
+  gather_facts: false
+  roles:
+    - role: mihudec.net_ansible.access_lists
+      vars:
+        TEMPLATE_ONLY: true
+        DEBUG: true
